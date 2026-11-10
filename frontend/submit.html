@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>استمارة تقديم نشاط | جامعة الانبار</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css?v=3.5">
+  <style>
+    body {
+      background: #f1f5f9;
+      color: #0f172a;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .form-page-container {
+      max-width: 860px;
+      margin: 2.5rem auto;
+      padding: 0 1.5rem;
+      width: 100%;
+      flex: 1;
+    }
+    .form-header-card {
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      color: #ffffff;
+      border-radius: 18px;
+      padding: 2.5rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.15);
+      border-top: 5px solid #2563eb;
+      position: relative;
+    }
+    .form-body-card {
+      background: #ffffff;
+      border-radius: 18px;
+      padding: 2.5rem;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    }
+    .field-row {
+      margin-bottom: 1.8rem;
+    }
+    .field-label {
+      display: block;
+      font-weight: 600;
+      font-size: 0.95rem;
+      margin-bottom: 0.5rem;
+      color: #1e293b;
+    }
+    .field-label .required-star {
+      color: #ef4444;
+      margin-right: 0.2rem;
+    }
+    .field-hint {
+      font-size: 0.8rem;
+      color: #64748b;
+      margin-top: 0.35rem;
+    }
+    .file-upload-box {
+      border: 2px dashed #cbd5e1;
+      border-radius: 12px;
+      padding: 2rem;
+      text-align: center;
+      background: #f8fafc;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .file-upload-box:hover {
+      border-color: #2563eb;
+      background: #eff6ff;
+    }
+    .success-card {
+      display: none;
+      text-align: center;
+      padding: 4rem 2rem;
+    }
+    .success-icon {
+      width: 72px;
+      height: 72px;
+      background: #ecfdf5;
+      color: #059669;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.2rem;
+      margin: 0 auto 1.5rem;
+    }
+  </style>
+</head>
+<body>
+
+<div class="form-page-container">
+  
+  <!-- Header -->
+  <div class="form-header-card">
+    <div style="display:flex;align-items:center;gap:.8rem;margin-bottom:1rem">
+      <div style="font-size:2rem">🏛️</div>
+      <div>
+        <div style="font-size:1.15rem;font-weight:700">جامعة الانبار</div>
+        <div style="font-size:.85rem;color:#93c5fd" id="header-subtitle">وحدة التنمية المستدامة</div>
+      </div>
+    </div>
+    <h1 style="font-size:1.6rem;font-weight:700;margin-bottom:.6rem" id="header-title">استمارة تقديم ومقترح نشاط</h1>
+    <p style="color:#94a3b8;font-size:.9rem;line-height:1.6">يرجى ملء كافة المتطلبات والمعلومات الخاصة بالنشاط لرفعه إلى لجنة التقييم والاعتماد.</p>
+  </div>
+
+  <!-- Form Body -->
+  <div class="form-body-card" id="form-container">
+    <div id="form-alert"></div>
+
+    <form id="public-activity-form" onsubmit="submitPublicActivity(event)">
+      
+      <div class="field-row">
+        <label class="field-label">اسم النشاط <span class="required-star">*</span></label>
+        <input class="form-control" id="f-name" required placeholder="أدخل اسم النشاط الكامل">
+      </div>
+
+      <div class="field-row">
+        <label class="field-label">نوع النشاط</label>
+        <input class="form-control" id="f-type" placeholder="مثال: ندوة علمية، ورشة عمل، مؤتمر، دورة تدريبية...">
+      </div>
+
+      <div class="field-row">
+        <label class="field-label">فكرة النشاط وأهدافه</label>
+        <textarea class="form-control" id="f-idea" rows="3" placeholder="اشرح ملخص فكرة النشاط والأهداف المرجوة منه..."></textarea>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));gap:1.5rem">
+        <div class="field-row">
+          <label class="field-label">اسم صاحب النشاط (المسؤول)</label>
+          <input class="form-control" id="f-leader" placeholder="الاسم الرباعي واللقب العلمي">
+        </div>
+        <div class="field-row">
+          <label class="field-label">التشكيل / جهة الانتساب</label>
+          <input class="form-control" id="f-aff" placeholder="الكلية / القسم / المركز">
+        </div>
+      </div>
+
+      <div class="field-row">
+        <label class="field-label">أسماء الأعضاء المشاركين بالنشاط</label>
+        <textarea class="form-control" id="f-members" rows="2" placeholder="اكتب أسماء المشاركين في تنفيذ النشاط..."></textarea>
+      </div>
+
+      <div class="field-row">
+        <label class="field-label">تخصصاتهم</label>
+        <textarea class="form-control" id="f-specializations" rows="2" placeholder="التخصصات العلمية أو الأقسام للأعضاء المشاركين..."></textarea>
+      </div>
+
+      <div class="field-row">
+        <label class="field-label">المرفقات أو الأوليات (PDF أو صور أو رابط Drive)</label>
+        <div class="file-upload-box" onclick="document.getElementById('f-file').click()">
+          <div style="font-size:2rem;margin-bottom:.5rem">📎</div>
+          <div style="font-weight:600;color:#1e293b" id="file-label">اضغط هنا لاختيار ملف من جهازك أو اسحبه هنا</div>
+          <div class="field-hint">يدعم ملفات PDF، Word، والصور (الحد الأقصى: 25 ميغابايت)</div>
+          <input type="file" id="f-file" style="display:none" onchange="handleFileSelect(this)">
+        </div>
+        <div style="margin-top:.8rem">
+          <input class="form-control" id="f-attachment-link" placeholder="أو ضع رابط المجلد من Google Drive مباشرة هنا..." dir="ltr">
+        </div>
+      </div>
+
+      <div style="margin-top:2.5rem;padding-top:1.5rem;border-top:1px solid #e2e8f0;display:flex;justify-content:flex-end">
+        <button type="submit" class="btn btn-primary" id="btn-submit" style="padding:.9rem 2.5rem;font-size:1rem;border-radius:10px">
+          🚀 إرسال النشاط للاعتماد
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Success Card -->
+  <div class="form-body-card success-card" id="success-container">
+    <div class="success-icon">✓</div>
+    <h2 style="font-size:1.6rem;font-weight:700;color:#0f172a;margin-bottom:.6rem">تم استلام النشاط بنجاح!</h2>
+    <p style="color:#64748b;font-size:1rem;line-height:1.6;margin-bottom:2rem">
+      تم تسجيل مقترح النشاط وإحالته مباشرة إلى لجنة التقييم والتصويت في وحدة التنمية المستدامة.
+    </p>
+    <button class="btn btn-outline" onclick="location.reload()" style="padding:.7rem 1.8rem">
+      تقديم نشاط آخر
+    </button>
+  </div>
+
+  <div style="text-align:center;margin-top:2rem;color:#94a3b8;font-size:.82rem">
+    جميع الحقوق محفوظة © جامعة الانبار - وحدة التنمية المستدامة
+  </div>
+
+</div>
+
+<script>
+  let selectedFile = null;
+
+  function handleFileSelect(input) {
+    if (input.files && input.files[0]) {
+      selectedFile = input.files[0];
+      document.getElementById('file-label').innerHTML = `✅ تم اختيار: <b>${selectedFile.name}</b> (${Math.round(selectedFile.size/1024)} KB)`;
+    }
+  }
+
+  // Load branding info
+  fetch('/api/activities/settings')
+    .then(r => r.json())
+    .then(data => {
+      if (data && data.settings) {
+        const s = data.settings;
+        if (s.system_subtitle) {
+          document.getElementById('header-subtitle').textContent = s.system_subtitle;
+        }
+        if (s.system_title) {
+          document.title = s.system_title + ' | استمارة التقديم';
+        }
+        let fav = document.querySelector("link[rel*='icon']");
+        if (!fav) {
+          fav = document.createElement('link');
+          fav.rel = 'shortcut icon';
+          document.head.appendChild(fav);
+        }
+        if (s.logo_type === 'image' && s.logo_image) {
+          fav.href = s.logo_image;
+        } else {
+          const emoji = s.logo_emoji || '🏛️';
+          const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">${emoji}</text></svg>`;
+          fav.href = 'data:image/svg+xml,' + encodeURIComponent(svg);
+        }
+      }
+    }).catch(()=>{});
+
+  async function submitPublicActivity(e) {
+    e.preventDefault();
+    const btn = document.getElementById('btn-submit');
+    const alertBox = document.getElementById('form-alert');
+    btn.disabled = true;
+    btn.innerHTML = '⏳ جاري الرفع والمزامنة...';
+    alertBox.innerHTML = '';
+
+    try {
+      let attachmentUrl = document.getElementById('f-attachment-link').value.trim();
+      let fileBase64 = '';
+      let fileName = '';
+      let fileMimeType = '';
+
+      // If a local file was chosen, read base64 for Drive & upload locally
+      if (selectedFile) {
+        fileName = selectedFile.name;
+        fileMimeType = selectedFile.type || 'application/octet-stream';
+        
+        // Read Base64 for Google Drive
+        const b64Promise = new Promise((resolve) => {
+          const reader = new FileReader();
+          reader.onload = () => {
+            const res = reader.result;
+            const base64Data = res.split(',')[1];
+            resolve(base64Data);
+          };
+          reader.readAsDataURL(selectedFile);
+        });
+        fileBase64 = await b64Promise;
+
+        // Local upload
+        const formData = new FormData();
+        formData.append('file', selectedFile);
+        const upRes = await fetch('/api/upload', {
+          method: 'POST',
+          body: formData
+        });
+        const upData = await upRes.json();
+        if (upData && upData.success) {
+          attachmentUrl = upData.fileUrl;
+        }
+      }
+
+      const payload = {
+        name: document.getElementById('f-name').value.trim(),
+        type: document.getElementById('f-type').value.trim(),
+        idea: document.getElementById('f-idea').value.trim(),
+        teamLeader: document.getElementById('f-leader').value.trim(),
+        affiliation: document.getElementById('f-aff').value.trim(),
+        teamMembers: document.getElementById('f-members').value.trim(),
+        specializations: document.getElementById('f-specializations').value.trim(),
+        attachment: attachmentUrl,
+        fileBase64,
+        fileName,
+        fileMimeType
+      };
+
+      const res = await fetch('/api/public/submit-activity', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json();
+
+      if (data && data.success) {
+        document.getElementById('form-container').style.display = 'none';
+        document.getElementById('success-container').style.display = 'block';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else {
+        alertBox.innerHTML = `<div class="alert alert-danger" style="margin-bottom:1.5rem">${data.message || 'حدث خطأ أثناء الإرسال'}</div>`;
+        btn.disabled = false;
+        btn.innerHTML = '🚀 إرسال النشاط للاعتماد';
+      }
+    } catch (err) {
+      alertBox.innerHTML = '<div class="alert alert-danger" style="margin-bottom:1.5rem">تعذر الاتصال بالسيرفر، يرجى المحاولة لاحقاً</div>';
+      btn.disabled = false;
+      btn.innerHTML = '🚀 إرسال النشاط للاعتماد';
+    }
+  }
+</script>
+
+</body>
+</html>
+

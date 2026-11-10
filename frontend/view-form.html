@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>استمارة إلكترونية | جامعة الانبار</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@400;700&family=Cairo:wght@400;600;700&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css?v=4.0">
+  <style>
+    body {
+      background: var(--form-bg, #f1f5f9);
+      color: #0f172a;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      font-family: var(--form-font, 'IBM Plex Sans Arabic', sans-serif);
+      transition: background 0.3s;
+    }
+    .form-page-container {
+      max-width: 820px;
+      margin: 2rem auto;
+      padding: 0 1.2rem;
+      width: 100%;
+      flex: 1;
+    }
+    .form-banner-img {
+      width: 100%;
+      max-height: 220px;
+      object-fit: cover;
+      border-radius: 18px 18px 0 0;
+      display: none;
+      border: 1px solid #e2e8f0;
+      border-bottom: none;
+    }
+    .form-header-card {
+      background: var(--form-header, #1e293b);
+      color: #ffffff;
+      border-radius: 18px;
+      padding: 2.5rem;
+      margin-bottom: 1.8rem;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.12);
+      border-top: 6px solid var(--form-header-accent, #2563eb);
+      position: relative;
+      overflow: hidden;
+      transition: background 0.3s;
+    }
+    .has-banner .form-header-card {
+      border-radius: 0 0 18px 18px;
+      border-top: none;
+    }
+    .form-body-card {
+      background: #ffffff;
+      border-radius: 18px;
+      padding: 2.2rem;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    }
+    .field-row {
+      margin-bottom: 1.8rem;
+    }
+    .field-label {
+      display: block;
+      font-weight: 600;
+      font-size: 0.95rem;
+      margin-bottom: 0.5rem;
+      color: #1e293b;
+    }
+    .field-label .required-star {
+      color: #ef4444;
+      margin-right: 0.2rem;
+    }
+    .success-card {
+      display: none;
+      text-align: center;
+      padding: 4rem 2rem;
+    }
+    .success-icon {
+      width: 72px;
+      height: 72px;
+      background: #ecfdf5;
+      color: #059669;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.2rem;
+      margin: 0 auto 1.5rem;
+    }
+  </style>
+</head>
+<body>
+
+<div class="form-page-container" id="page-wrapper">
+  
+  <!-- Optional Banner Image -->
+  <img id="form-banner" class="form-banner-img" alt="ترويسة الاستمارة">
+
+  <!-- Header -->
+  <div class="form-header-card" id="form-header-box">
+    <div style="display:flex;align-items:center;gap:.8rem;margin-bottom:1rem">
+      <div style="font-size:1.8rem">🏛️</div>
+      <div>
+        <div style="font-size:1.15rem;font-weight:700">جامعة الانبار</div>
+        <div style="font-size:.85rem;color:#93c5fd" id="sub-org-title">وحدة التنمية المستدامة</div>
+      </div>
+    </div>
+    <h1 style="font-size:1.6rem;font-weight:700;margin-bottom:.6rem" id="form-title">جاري تحميل الاستمارة...</h1>
+    <p style="color:#cbd5e1;font-size:.9rem;line-height:1.6" id="form-desc"></p>
+  </div>
+
+  <!-- Form Body -->
+  <div class="form-body-card" id="form-card">
+    <div id="form-alert"></div>
+    <form id="dynamic-form" onsubmit="submitForm(event)">
+
+      <!-- Google Forms Style: Respondent Information Section -->
+      <div style="background:#f8fafc;border:1px solid #e2e8f0;border-right:5px solid var(--form-header-accent, #2563eb);border-radius:12px;padding:1.4rem;margin-bottom:2rem">
+        <div style="display:flex;align-items:center;gap:.6rem;font-weight:700;font-size:1.05rem;color:#0f172a;margin-bottom:1rem">
+          <span>معلومات مقدم النشاط</span>
+          <span style="font-size:.78rem;background:#e0f2fe;color:#0284c7;padding:.2rem .5rem;border-radius:6px;font-weight:600">تسجيل رسمي</span>
+        </div>
+        
+        <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(260px, 1fr));gap:1.2rem">
+          <div class="field-row" style="margin-bottom:0">
+            <label class="field-label">الاسم الكامل <span class="required-star">*</span></label>
+            <input class="form-control" id="resp-name" required placeholder="الاسم الرباعي الكامل">
+          </div>
+
+          <div class="field-row" style="margin-bottom:0">
+            <label class="field-label">البريد الإلكتروني الشغال <span class="required-star">*</span></label>
+            <input class="form-control" type="email" id="resp-email" required dir="ltr" placeholder="example@uoanbar.edu.iq">
+            <div style="font-size:.74rem;color:#64748b;margin-top:.3rem">سيتم توثيق إجاباتك بهذا البريد الإلكتروني للتواصل وتأكيد الاستلام</div>
+          </div>
+
+          <div class="field-row" style="margin-bottom:0">
+            <label class="field-label">الجهة / الكلية / القسم <span class="required-star">*</span></label>
+            <input class="form-control" id="resp-org" required placeholder="اسم التشكيل أو الكلية أو المركز">
+          </div>
+
+          <div class="field-row" style="margin-bottom:0">
+            <label class="field-label">رقم الهاتف / الواتساب (اختياري)</label>
+            <input class="form-control" type="tel" id="resp-phone" dir="ltr" placeholder="078xxxxxxxx">
+          </div>
+        </div>
+      </div>
+
+      <!-- Questions List -->
+      <div id="questions-container">
+        <div style="text-align:center;padding:2rem;color:#64748b">جاري تحميل الأسئلة...</div>
+      </div>
+
+      <div style="margin-top:2.5rem;padding-top:1.5rem;border-top:1px solid #e2e8f0;display:flex;justify-content:flex-end">
+        <button type="submit" class="btn btn-primary" id="btn-submit" style="padding:.9rem 3rem;font-size:1.05rem;font-weight:600;border-radius:10px">
+          إرسال
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Form Stopped / Closed Modal Dialog -->
+  <div id="closed-modal-backdrop" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(15,23,42,0.7);z-index:9999;backdrop-filter:blur(6px);align-items:center;justify-content:center;padding:1.5rem">
+    <div style="background:#ffffff;border-radius:24px;max-width:500px;width:100%;padding:2.8rem 2.2rem;text-align:center;box-shadow:0 25px 50px -12px rgba(0,0,0,0.35);border:1px solid #e2e8f0;animation:popIn 0.3s cubic-bezier(0.16, 1, 0.3, 1)">
+      <div style="width:76px;height:76px;background:#fef2f2;border:2px solid #fecaca;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:2.4rem;margin:0 auto 1.4rem;box-shadow:0 10px 15px -3px rgba(239,68,68,0.15)">
+        🛑
+      </div>
+      <h3 style="font-size:1.45rem;font-weight:700;color:#0f172a;margin-bottom:.8rem">استقبال الردود متوقف حالياً</h3>
+      <p style="color:#64748b;font-size:1rem;line-height:1.7;margin-bottom:2rem">
+        عذراً، استقبال الردود لهذه الاستمارة متوقف حالياً من قِبل إدارة النظام، ولا يمكن استلام أو تسجيل مشاركات جديدة في الوقت الحاضر.
+      </p>
+      <div style="display:flex;justify-content:center">
+        <button type="button" class="btn btn-outline" onclick="closeClosedModal()" style="padding:.75rem 2.5rem;font-size:1rem;font-weight:600;border-radius:12px;border:1px solid #cbd5e1;color:#334155;background:#f8fafc">
+          إغلاق التنبيه
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    @keyframes popIn {
+      0% { opacity: 0; transform: scale(0.92); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+  </style>
+
+  <div class="form-body-card success-card" id="success-card">
+    <div class="success-icon">✓</div>
+    <h2 style="font-size:1.6rem;font-weight:700;color:#0f172a;margin-bottom:.6rem">تم استلام إجابتك بنجاح!</h2>
+    <p style="color:#64748b;font-size:1rem;line-height:1.6;margin-bottom:2rem">
+      شكراً لتعاونكم، تم حفظ الإجابة وإرسالها إلى قاعدة البيانات ومجلد Google Drive.
+    </p>
+    <button class="btn btn-outline" onclick="location.reload()" style="padding:.7rem 1.8rem">
+      إرسال إجابة أخرى
+    </button>
+  </div>
+
+  <div style="text-align:center;margin-top:2rem;color:#94a3b8;font-size:.82rem">
+    جميع الحقوق محفوظة © جامعة الانبار - وحدة التنمية المستدامة
+  </div>
+
+</div>
+
+<script>
+  const formId = window.location.pathname.split('/').pop();
+  let questionsData = [];
+  let fileInputs = {};
+  let currentFormIsActive = true;
+
+  function showClosedModal() {
+    const m = document.getElementById('closed-modal-backdrop');
+    if (m) {
+      m.style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+    }
+  }
+
+  function closeClosedModal() {
+    const m = document.getElementById('closed-modal-backdrop');
+    if (m) {
+      m.style.display = 'none';
+      document.body.style.overflow = '';
+    }
+  }
+
+  async function loadForm() {
+    try {
+      const res = await fetch('/api/public/forms/' + formId);
+      const data = await res.json();
+      if (!data || !data.success) {
+        document.getElementById('form-card').innerHTML = '<div class="alert alert-danger">عذراً، الاستمارة غير متوفرة أو تم إغلاقها.</div>';
+        return;
+      }
+
+      const form = data.form;
+      currentFormIsActive = (form.is_active === 1 || form.is_active === true || form.is_active === '1');
+
+      if (!currentFormIsActive) {
+        // Show the banner and disable inputs
+        const alertBox = document.getElementById('form-alert');
+        alertBox.innerHTML = '<div class="alert alert-danger" style="display:flex;align-items:center;justify-content:center;gap:.6rem;font-weight:600;font-size:1.02rem;padding:1.1rem;background:#fef2f2;border:1px solid #fecaca;color:#b91c1c;border-radius:12px;margin-bottom:1.5rem"><span>🛑</span> عذراً، استقبال الردود لهذه الاستمارة متوقف حالياً من قِبل الإدارة</div>';
+        const submitBtn = document.getElementById('btn-submit');
+        if (submitBtn) {
+          submitBtn.disabled = true;
+          submitBtn.style.opacity = '0.6';
+          submitBtn.style.cursor = 'not-allowed';
+          submitBtn.title = 'استقبال الردود متوقف';
+        }
+      }
+      document.getElementById('form-title').textContent = form.title;
+      const descEl = document.getElementById('form-desc');
+      if (form.description && form.description.trim()) {
+        descEl.textContent = form.description.trim();
+        descEl.style.display = 'block';
+      } else {
+        descEl.textContent = '';
+        descEl.style.display = 'none';
+      }
+      document.title = form.title + ' | جامعة الانبار';
+
+      // Set Dynamic Favicon
+      let fav = document.querySelector("link[rel*='icon']");
+      if (!fav) {
+        fav = document.createElement('link');
+        fav.rel = 'shortcut icon';
+        document.head.appendChild(fav);
+      }
+      if (form.header_image) {
+        fav.href = form.header_image;
+      } else {
+        const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">🏛️</text></svg>`;
+        fav.href = 'data:image/svg+xml,' + encodeURIComponent(svg);
+      }
+
+      // Apply Google Forms-like custom styling (Theme Colors & Font & Banner)
+      if (form.bg_color) {
+        document.documentElement.style.setProperty('--form-bg', form.bg_color);
+      }
+      if (form.header_color) {
+        document.documentElement.style.setProperty('--form-header', form.header_color);
+        document.documentElement.style.setProperty('--form-header-accent', form.header_color);
+        const submitBtn = document.getElementById('btn-submit');
+        if (submitBtn) {
+          submitBtn.style.background = form.header_color;
+          submitBtn.style.borderColor = form.header_color;
+        }
+      }
+      if (form.font_family) {
+        const fontMap = {
+          'ibm': "'IBM Plex Sans Arabic', sans-serif",
+          'tajawal': "'Tajawal', sans-serif",
+          'cairo': "'Cairo', sans-serif",
+          'almarai': "'Almarai', sans-serif"
+        };
+        document.documentElement.style.setProperty('--form-font', fontMap[form.font_family] || fontMap['ibm']);
+      }
+      if (form.header_image) {
+        const banner = document.getElementById('form-banner');
+        const wrapper = document.getElementById('page-wrapper');
+        if (banner && wrapper) {
+          banner.src = form.header_image;
+          banner.style.display = 'block';
+          wrapper.classList.add('has-banner');
+        }
+      }
+
+      questionsData = data.questions || [];
+      renderQuestions(questionsData);
+    } catch (e) {
+      document.getElementById('form-card').innerHTML = '<div class="alert alert-danger">تعذر الاتصال بالسيرفر</div>';
+    }
+  }
+
+  function renderQuestions(questions) {
+    const container = document.getElementById('questions-container');
+    if (!questions.length) {
+      container.innerHTML = '<div style="text-align:center;color:#64748b">لا توجد أسئلة مضافة في هذه الاستمارة بعد.</div>';
+      return;
+    }
+
+    container.innerHTML = questions.map((q, idx) => {
+      const req = q.is_required ? '<span class="required-star">*</span>' : '';
+      let fieldHtml = '';
+
+      if (q.question_type === 'textarea') {
+        fieldHtml = `<textarea class="form-control" id="q_${q.id}" rows="3" ${q.is_required?'required':''} placeholder="اكتب إجابتك هنا..."></textarea>`;
+      } else if (q.question_type === 'select') {
+        const opts = (q.options || '').split('\n').filter(o=>o.trim()).map(o => `<option value="${o.trim()}">${o.trim()}</option>`).join('');
+        fieldHtml = `<select class="form-control" id="q_${q.id}" ${q.is_required?'required':''}><option value="">اختر إجابة...</option>${opts}</select>`;
+      } else if (q.question_type === 'radio') {
+        const opts = (q.options || '').split('\n').filter(o=>o.trim()).map(o => `
+          <label style="display:flex;align-items:center;gap:.5rem;margin-bottom:.4rem;cursor:pointer">
+            <input type="radio" name="q_${q.id}" value="${o.trim()}" ${q.is_required?'required':''}>
+            <span>${o.trim()}</span>
+          </label>
+        `).join('');
+        fieldHtml = `<div style="padding-top:.3rem">${opts}</div>`;
+      } else if (q.question_type === 'file') {
+        fieldHtml = `
+          <div style="border:2px dashed #cbd5e1;padding:1.5rem;border-radius:10px;text-align:center;background:#f8fafc;cursor:pointer" onclick="document.getElementById('q_${q.id}').click()">
+            <div style="font-size:1.8rem;margin-bottom:.3rem">📎</div>
+            <div style="font-weight:600" id="lbl_q_${q.id}">اضغط هنا لاختيار ملف أو اسحبه هنا</div>
+            <input type="file" id="q_${q.id}" style="display:none" ${q.is_required?'required':''} onchange="handleSingleFile('${q.id}', this)">
+          </div>
+        `;
+      } else {
+        fieldHtml = `<input class="form-control" type="${q.question_type==='number'?'number':q.question_type==='date'?'date':'text'}" id="q_${q.id}" ${q.is_required?'required':''} placeholder="إجابتك...">`;
+      }
+
+      return `
+        <div class="field-row">
+          <label class="field-label">${idx + 1}. ${q.label} ${req}</label>
+          ${fieldHtml}
+        </div>
+      `;
+    }).join('');
+  }
+
+  function handleSingleFile(qId, input) {
+    if (input.files && input.files[0]) {
+      const f = input.files[0];
+      fileInputs[qId] = f;
+      document.getElementById('lbl_' + 'q_' + qId).innerHTML = `✅ تم اختيار: <b>${f.name}</b> (${Math.round(f.size/1024)} KB)`;
+    }
+  }
+
+  async function submitForm(e) {
+    e.preventDefault();
+
+    if (!currentFormIsActive) {
+      showClosedModal();
+      return;
+    }
+
+    const btn = document.getElementById('btn-submit');
+    const alertBox = document.getElementById('form-alert');
+    btn.disabled = true;
+    btn.innerHTML = 'جاري الحفظ والإرسال...';
+    alertBox.innerHTML = '';
+
+    const answers = {};
+    let fileData = null;
+
+    try {
+      for (const q of questionsData) {
+        if (q.question_type === 'radio') {
+          const checked = document.querySelector(`input[name="q_${q.id}"]:checked`);
+          answers[q.label] = checked ? checked.value : '';
+        } else if (q.question_type === 'file') {
+          if (fileInputs[q.id]) {
+            const file = fileInputs[q.id];
+            // Read Base64 for Drive
+            const b64Promise = new Promise((resolve) => {
+              const r = new FileReader();
+              r.onload = () => resolve(r.result.split(',')[1]);
+              r.readAsDataURL(file);
+            });
+            const b64 = await b64Promise;
+            fileData = {
+              fileBase64: b64,
+              fileName: file.name,
+              fileMimeType: file.type
+            };
+            // Also upload locally
+            const formData = new FormData();
+            formData.append('file', file);
+            const upRes = await fetch('/api/upload', { method: 'POST', body: formData });
+            const upJson = await upRes.json();
+            answers[q.label] = upJson.fileUrl || file.name;
+          } else {
+            answers[q.label] = '';
+          }
+        } else {
+          const el = document.getElementById(`q_${q.id}`);
+          answers[q.label] = el ? el.value.trim() : '';
+        }
+      }
+
+      // Collect respondent personal information
+      const respondent = {
+        name: document.getElementById('resp-name')?.value?.trim() || '',
+        email: document.getElementById('resp-email')?.value?.trim() || '',
+        org: document.getElementById('resp-org')?.value?.trim() || '',
+        phone: document.getElementById('resp-phone')?.value?.trim() || ''
+      };
+
+      if (!respondent.name || !respondent.email || !respondent.org) {
+        alertBox.innerHTML = '<div class="alert alert-danger">يرجى ملء جميع الحقول الإلزامية للمعلومات الشخصية (الاسم، البريد الإلكتروني، والجهة).</div>';
+        btn.disabled = false;
+        btn.innerHTML = '🚀 إرسال الإجابة';
+        window.scrollTo({ top: 120, behavior: 'smooth' });
+        return;
+      }
+
+      // Extract activity/leader name for naming the file in Google Drive
+      let targetName = '';
+      for (const [key, val] of Object.entries(answers)) {
+        if (key.includes('اسم النشاط') || key.includes('عنوان النشاط') || key.includes('النشاط')) {
+          targetName = val;
+          break;
+        }
+      }
+      if (!targetName) {
+        targetName = respondent.name;
+      }
+      if (fileData) {
+        fileData.activityName = targetName || 'نشاط';
+      }
+
+      const res = await fetch(`/api/public/forms/${formId}/submit`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ answers, respondent, fileData })
+      });
+      const data = await res.json();
+
+      if (data && data.success) {
+        document.getElementById('form-card').style.display = 'none';
+        document.getElementById('success-card').style.display = 'block';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else {
+        if (res.status === 403 || (data.message && data.message.includes('متوقف'))) {
+          showClosedModal();
+        } else {
+          alertBox.innerHTML = `<div class="alert alert-danger">${data.message || 'خطأ في الإرسال'}</div>`;
+        }
+        btn.disabled = false;
+        btn.innerHTML = 'إرسال';
+      }
+    } catch (err) {
+      alertBox.innerHTML = '<div class="alert alert-danger">حدث خطأ في الاتصال</div>';
+      btn.disabled = false;
+      btn.innerHTML = 'إرسال';
+    }
+  }
+
+  loadForm();
+</script>
+
+</body>
+</html>
+
