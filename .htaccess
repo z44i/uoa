@@ -1,0 +1,32 @@
+# .htaccess - Production Apache Configuration for University Server
+RewriteEngine On
+
+# Set Environment Headers & Encoding
+AddDefaultCharset UTF-8
+
+# Allow CORS
+Header always set Access-Control-Allow-Origin "*"
+Header always set Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS, PATCH"
+Header always set Access-Control-Allow-Headers "Content-Type, Authorization, X-Requested-With"
+
+# Handle Preflight OPTIONS
+RewriteCond %{REQUEST_METHOD} OPTIONS
+RewriteRule ^(.*)$ $1 [R=200,L]
+
+# Route short form URLs /s/xxxxx to view-form.html
+RewriteRule ^s/([^/]+)$ frontend/view-form.html [QSA,L]
+RewriteRule ^f/([^/]+)$ frontend/view-form.html [QSA,L]
+
+# Route /submit to submit.html
+RewriteRule ^submit$ frontend/submit.html [QSA,L]
+
+# Route API endpoints directly to api/index.php
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^api/(.*)$ api/index.php [QSA,L]
+
+# Allow direct access to uploads folder
+RewriteRule ^uploads/(.*)$ uploads/$1 [L]
+
+# Route root to frontend/index.html
+DirectoryIndex frontend/index.html index.php

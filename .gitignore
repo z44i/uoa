@@ -1,0 +1,5 @@
+node_modules/
+.env
+database/*.sqlite-shm
+database/*.sqlite-wal
+generate_mock_data.js
